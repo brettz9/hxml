@@ -45,6 +45,7 @@ if (![].includes) {
 * @todo Could accept DOM or array of DOM (or NodeList) as argument for XML, with option to convert in place
 */
 var xhtmlNS = 'http://www.w3.org/1999/xhtml';
+var prefix = 'hxml'; // Note that "xml" in any case is prohibited at the beginning of data-* attributes.
 function XMLToHTML (config) {
     config = config || {};
     var xmls = config.xml;
@@ -65,7 +66,7 @@ function XMLToHTML (config) {
 
         var currentNode, iteratingNode;
         function setAttribute (att, i) {
-            iteratingNode.dataset['hxmlAttribute' + (i + 1)] = att.name + '="' + att.value + '"';
+            iteratingNode.dataset[prefix + 'Attribute' + (i + 1)] = att.name + '="' + att.value + '"';
         }
         
         var doc = document.implementation.createDocument(xhtmlNS, 'html', null);
@@ -73,7 +74,7 @@ function XMLToHTML (config) {
             var newNode;
             if (currentNode.localName && ((convertXHTML && currentNode.namespaceURI === xhtmlNS) || !ignoredNamespaces.includes(currentNode.namespaceURI))) {
                 newNode = document.createElementNS(xhtmlNS, elementName);
-                newNode.dataset.hxmlElement = currentNode.localName;
+                newNode.dataset[prefix + 'Element'] = currentNode.localName;
                 iteratingNode = newNode;
                 Array.from(currentNode.attributes || []).forEach(setAttribute);
                 currentNode.parentNode.insertBefore(newNode, currentNode);
