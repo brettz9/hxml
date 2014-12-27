@@ -1,5 +1,5 @@
 /*global DOMParser, NodeFilter*/
-/*jslint vars:true*/
+/*jslint vars:true, todo:true*/
 (function () {'use strict';
 
 if (![].includes) {
@@ -64,7 +64,7 @@ function XMLToHTML (config) {
     var ret = xmls.map(function (xml) {
         xml = new DOMParser().parseFromString('<html xmlns="' + xhtmlNS + '">' + xml + '</html>', 'text/xml'); // Dummy needed for insertBefore and any root-level comments/processing instructions
 
-        var currentNode, iteratingNode;
+        var iteratingNode;
         function setAttribute (att, i) {
             iteratingNode.dataset[prefix + 'Attribute' + (i + 1)] = att.name + '="' + att.value + '"';
         }
