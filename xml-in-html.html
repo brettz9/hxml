@@ -10,26 +10,26 @@
             <someChild></someChild>
             <!-- A comment -->
             <![CDATA[
-                Some <>&'" cdata
+                Some <&'" cdata
             ]]>
             <childWithContent>someContent<lb /></childWithContent>
             <anotherChild withAnAtt="yes" withAnotherAtt="also" ns:att="123" xmlns:ns="aNS"></anotherChild>
         </myXML>
     </script>
-    <script type="text/html">
+</head>
+<body>
+    <div id="XML-as-HTML" style="display:none;">
         <a xmlns="http://www.w3.org/1999/xhtml" data-hxml-element="myXML" data-hxml-attribute1="xmlns=&quot;http://brett-zamir.me/namespaces/exampleNamespace&quot;">
             <?procinst something="somethingElse" ?>
             <a data-hxml-element="someChild"/>
             <!-- A comment -->
             <![CDATA[
-                Some <>&'" cdata
+                Some <&'" cdata
             ]]>
             <a data-hxml-element="childWithContent">someContent<a data-hxml-element="lb"/></a>
             <a data-hxml-element="anotherChild" data-hxml-attribute1="withAnAtt=&quot;yes&quot;" data-hxml-attribute2="withAnotherAtt=&quot;also&quot;" data-hxml-attribute3="ns:att=&quot;123&quot;" data-hxml-attribute4="xmlns:ns=&quot;aNS&quot;"/>
         </a>
-    </script>
-</head>
-<body>
+    </div>
     <script>
 
     alert(XMLToHTML({firstResultOnly: true}).documentElement.outerHTML);
