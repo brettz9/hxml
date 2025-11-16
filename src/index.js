@@ -115,14 +115,124 @@ function xmlToHtml (config) {
 }
 
 /**
- * @param {object} [config] The configuration object
- * @todo Implement (and export)!
+ * @typedef {object} HtmlToXmlConfig The configuration object
+ * @property {import('jsdom').DOMWindow|
+ *   typeof globalThis} window The window object
+ * @property {HTMLDocument} html
  */
-/*
-function htmlToXml (config) {
 
+/**
+ * @param {HTMLElement} htmlElem
+ * @throws {TypeError}
+ * @returns {{
+ *   elem: string,
+ *   xmlNs: string|undefined,
+ *   attValues: {name: string, value: string}[]
+ * }}
+ */
+function getAttributes (htmlElem) {
+  const elem = htmlElem.dataset.hxmlElement;
+  if (!elem) {
+    throw new TypeError('Missing valid hxml element');
+  }
+  const colonPos = elem.indexOf(':');
+  let attribute;
+  let xmlNs;
+  let attNum = 1;
+
+  /** @type {{name: string, value: string}[]} */
+  const attValues = [];
+  do {
+    attribute = htmlElem.dataset['hxmlAttribute' + attNum];
+    if (attribute) {
+      attNum++;
+      const pos = attribute.indexOf('=');
+      if (pos === -1) {
+        throw new TypeError('Invalid hxml attribute');
+      }
+      const name = attribute.slice(0, pos);
+      // Skip quotes
+      const value = attribute.slice(pos + 2, -1);
+
+      if (
+        // Default namespace
+        (name === 'xmlns' && colonPos === -1) ||
+        // Prefixed namespace
+        (name.startsWith('xmlns:') && colonPos !== -1 &&
+        name.slice(6) === elem.slice(0, colonPos))
+      ) {
+        xmlNs = value;
+      } else {
+        attValues.push({name, value});
+      }
+    }
+  } while (attribute);
+
+  return {
+    elem,
+    xmlNs,
+    attValues
+  };
 }
-*/
 
-export {xmlToHtml};
-// export {htmlToXml};
+/**
+ * @param {HtmlToXmlConfig} config The configuration object
+ * @throws {TypeError}
+ * @returns {XMLDocument}
+ */
+function htmlToXml ({html, window}) {
+  const {document} = window;
+  // eslint-disable-next-line prefer-destructuring -- TS
+  const firstElementChild = /** @type {HTMLElement} */ (
+    html.documentElement.firstElementChild
+  );
+  const {
+    xmlNs, elem: root, attValues
+  } = getAttributes(firstElementChild);
+
+  const xmlDoc = document.implementation.createDocument(
+    xmlNs ?? '', root, null
+  );
+  attValues.forEach(({name, value}) => {
+    xmlDoc.documentElement.setAttribute(name, value);
+  });
+
+  /**
+   * @param {Element} xmlElement
+   * @returns {(childNode: Node) => void}
+   */
+  function getProcessChildNode (xmlElement) {
+    return function processChildNode (childNode) {
+      if (childNode.nodeType !== 1) {
+        xmlElement.append(childNode.cloneNode(true));
+        return;
+      }
+      const elem = /** @type {HTMLElement} */ (childNode);
+
+      const {
+        xmlNs: childXmlNs, elem: xmlElemStr, attValues: attVals
+      } = getAttributes(elem);
+
+      const xmlEl = document.createElementNS(
+        childXmlNs ?? xmlElement.namespaceURI ?? '',
+        xmlElemStr
+      );
+
+      attVals.forEach(({name, value}) => {
+        xmlEl.setAttribute(name, value);
+      });
+
+      xmlElement.append(xmlEl);
+
+      [...elem.childNodes].forEach((node) => {
+        getProcessChildNode(xmlEl)(node);
+      });
+    };
+  }
+  [...firstElementChild.childNodes].forEach(
+    getProcessChildNode(xmlDoc.documentElement)
+  );
+  return xmlDoc;
+}
+
+export {xmlToHtml, htmlToXml};

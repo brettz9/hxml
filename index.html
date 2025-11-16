@@ -31,9 +31,15 @@
         </a>
     </div>
     <script type="module">
-    import {xmlToHtml} from './src/index-browser.js';
+    /* globals XMLSerializer -- Browser */
+    import {xmlToHtml, htmlToXml} from './src/index-browser.js';
 
-    alert(xmlToHtml({firstResultOnly: true}).documentElement.outerHTML);
+    const html = xmlToHtml({firstResultOnly: true});
+
+    alert(html.documentElement.outerHTML);
+    alert(new XMLSerializer().serializeToString(htmlToXml({
+      html
+    })));
     </script>
 </body>
 </html>
