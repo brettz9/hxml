@@ -6,7 +6,8 @@ const prefix = 'hxml';
 
 /**
  * @typedef {object} XmlToHtmlConfig The configuration object
- * @property {typeof globalThis} window The window object
+ * @property {import('jsdom').DOMWindow|
+ *   typeof globalThis} window The window object
  * @property {string|string[]} [xml] Array of XML to convert. Defaults to all
  *  script tags of type application/xml or text/xml
  * @property {boolean} [firstResultOnly] Whether to only return the first
@@ -58,7 +59,8 @@ function xmlToHtml (config) {
     // Dummy needed for insertBefore and any root-level
     //   comments/processing instructions
     const xml = new DOMParser().parseFromString(
-      '<html xmlns="' + xhtmlNS + '">' + xmlStr + '</html>', 'text/xml'
+      '<html:html xmlns:html="' + xhtmlNS + '">' +
+        xmlStr + '</html:html>', 'text/xml'
     );
 
     /** @type {HTMLElement} */

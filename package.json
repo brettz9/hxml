@@ -18,7 +18,8 @@
   "main": "src/xml-in-html.js",
   "exports": {
     "browser": "./src/xml-in-html-browser.js",
-    "import": "./src/xml-in-html.js"
+    "import": "./src/xml-in-html-node.js",
+    "default": "./src/xml-in-html.js"
   },
   "scripts": {
     "start": "static -p 8074",
@@ -30,8 +31,11 @@
   },
   "devDependencies": {
     "@node-static/node-static": "^0.8.1",
+    "c8": "^10.1.3",
+    "chai": "^6.2.1",
     "eslint": "latest",
     "eslint-config-ash-nazg": "latest",
+    "mocha": "^11.7.5",
     "typescript": "^5.9.3"
   },
   "engines": {
@@ -39,5 +43,9 @@
   },
   "browserslist": [
     "defaults, not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "@types/jsdom": "^27.0.0",
+    "jsdom": "^27.2.0"
+  }
 }
