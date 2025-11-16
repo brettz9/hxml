@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
-    <script src="xml-in-html.js"></script>
+    <title>hxml demo</title>
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgo=" />
     <script type="application/xml"><!-- abc-->
         <myXML xmlns="http://brett-zamir.me/namespaces/exampleNamespace">
             <?procinst something="somethingElse" ?>
@@ -30,10 +30,10 @@
             <a data-hxml-element="anotherChild" data-hxml-attribute1="withAnAtt=&quot;yes&quot;" data-hxml-attribute2="withAnotherAtt=&quot;also&quot;" data-hxml-attribute3="ns:att=&quot;123&quot;" data-hxml-attribute4="xmlns:ns=&quot;aNS&quot;"/>
         </a>
     </div>
-    <script>
+    <script type="module">
+    import {xmlToHtml} from './src/index-browser.js';
 
-    alert(XMLToHTML({firstResultOnly: true}).documentElement.outerHTML);
-
+    alert(xmlToHtml({firstResultOnly: true}).documentElement.outerHTML);
     </script>
 </body>
 </html>

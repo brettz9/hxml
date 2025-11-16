@@ -1,0 +1,43 @@
+{
+  "name": "hxml",
+  "version": "0.1.0",
+  "description": "Represent XML within HTML",
+  "keywords": [],
+  "homepage": "https://github.com/brettz9/hxml",
+  "bugs": {
+    "url": "https://github.com/brettz9/hxml/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brettz9/hxml.git"
+  },
+  "license": "MIT",
+  "author": "Brett Zamir <brettz9@yahoo.com>",
+  "contributors": [],
+  "type": "module",
+  "main": "src/xml-in-html.js",
+  "exports": {
+    "browser": "./src/xml-in-html-browser.js",
+    "import": "./src/xml-in-html.js"
+  },
+  "scripts": {
+    "start": "static -p 8074",
+    "tsc": "tsc",
+    "eslint": "eslint --ext=js,cjs,mjs,md,html .",
+    "lint": "npm run eslint",
+    "mocha": "mocha",
+    "test": "c8 npm run mocha"
+  },
+  "devDependencies": {
+    "@node-static/node-static": "^0.8.1",
+    "eslint": "latest",
+    "eslint-config-ash-nazg": "latest",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "browserslist": [
+    "defaults, not op_mini all"
+  ]
+}
